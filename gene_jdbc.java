@@ -8,20 +8,16 @@ import java.awt.event.ActionEvent;
 import java.sql.*;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.sql.*;
 public class gene_jdbc extends JFrame implements ActionListener {
 	
 	
 
-	public static void main(String[] args) throws Exception{
+	public static void main(String[] args) throws Exception {
+		
+		JFrame gj = new JFrame();
 		
 		
-		gene_jdbc gj = new gene_jdbc();
 	 
 		JLabel item1;
 		 JTextField item2;
@@ -48,8 +44,15 @@ public class gene_jdbc extends JFrame implements ActionListener {
 				String str = item2.getText();
 				String str2 = item3.getText();
 				
+				gj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				gj.setSize(275,180);
+				gj.setVisible(true);
+	}
+			
+		
+				
 				public void actionPerformed(ActionEvent event) {
-					
+					try{
 					 Class.forName("org.sqlite.JDBC");
 				        Connection conn = DriverManager.getConnection("jdbc:sqlite:ttest.db");
 				        Statement stat = conn.createStatement();
@@ -57,9 +60,12 @@ public class gene_jdbc extends JFrame implements ActionListener {
 				        stat.executeUpdate("create table people (F_name, L_name);");
 				        PreparedStatement prep = conn.prepareStatement(
 				            "insert into people values (?, ?);");
+				        String str = "rohith";
+				        String str2 = "venky";
+				        
 
-				        prep.setString(1 , "str");
-				        prep.setString(2 , "str2");
+				        prep.setString(1 , str);
+				        prep.setString(2 , str2);
 				        prep.addBatch();
 
 				        conn.setAutoCommit(false);
@@ -76,14 +82,11 @@ public class gene_jdbc extends JFrame implements ActionListener {
 				        conn.close();
 					
 				}
-				
-			 
-			
-			gj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			gj.setSize(275,180);
-			gj.setVisible(true);
-		}
+					catch(Exception e){System.out.println("exe");}
+			  }
 }
+		
+
 
 		
 		
