@@ -1,94 +1,104 @@
 import javax.swing.JFrame;
 import java.awt.FlowLayout;
 import javax.swing.JTextField;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.sql.*;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import java.sql.*;
-public class gene_jdbc extends JFrame implements ActionListener {
-	
-	
 
-	public static void main(String[] args) throws Exception {
+class Gene extends JFrame implements ActionListener
+{
+	//Declare the GUI items that we'll be using in this class
+	JLabel lbl1;
+	JFrame frame1;
+	JTextField text1;
+	JTextField text2;
+	JButton reg;
+
+	//Constructor
+	Gene()
+	{
+		//Create a window layout
+		//TODO: move all this to a generic framing function/class
+		frame1 = new JFrame();
+		frame1.setLayout(new FlowLayout());
+
+		lbl1 = new JLabel("Enter the first name: ");
+		frame1.add(lbl1);
+		text1 = new JTextField(20);
+		frame1.add(text1);
+
+		lbl1 = new JLabel("Enter the last name: ");
+		frame1.add(lbl1);
+		text2 = new JTextField(20);
+		frame1.add(text2);
+
+		reg = new JButton("Submit");
+		frame1.add(reg);
 		
-		JFrame gj = new JFrame();
-		
-		
-	 
-		JLabel item1;
-		 JTextField item2;
-		 JTextField item3;
-		 JButton reg;
-		 
-				gj.setLayout(new FlowLayout());
-				
-				item1 = new JLabel("Enter the first name: ");
-				gj.add(item1);
-				item2 = new JTextField(20);
-				gj.add(item2);
-				
-				item1 = new JLabel("Enter the last name: ");
-				gj.add(item1);
-				item3 = new JTextField(20);
-				gj.add(item3);
-				
-				reg = new JButton("Submit");
-				gj.add(reg);
-				gene_jdbc Handler = new gene_jdbc();
-				reg.addActionListener(Handler);
-				
-				String str = item2.getText();
-				String str2 = item3.getText();
-				
-				gj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				gj.setSize(275,180);
-				gj.setVisible(true);
+		//callback function gets data from this class
+		reg.addActionListener(this);
+
+		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame1.setSize(275,180);
+		frame1.setVisible(true);
+
 	}
+
+	//what we do 
+	public void actionPerformed(ActionEvent event)
+	{
+		try
+		{	
+			String s1 = text1.getText();
+			String s2 = text2.getText();
 			
-		
-				
-				public void actionPerformed(ActionEvent event) {
-					try{
-					 Class.forName("org.sqlite.JDBC");
-				        Connection conn = DriverManager.getConnection("jdbc:sqlite:ttest.db");
-				        Statement stat = conn.createStatement();
-				        stat.executeUpdate("drop table if exists people;");
-				        stat.executeUpdate("create table people (F_name, L_name);");
-				        PreparedStatement prep = conn.prepareStatement(
-				            "insert into people values (?, ?);");
-				        String str = "rohith";
-				        String str2 = "venky";
-				        
-
-				        prep.setString(1 , str);
-				        prep.setString(2 , str2);
-				        prep.addBatch();
-
-				        conn.setAutoCommit(false);
-				        prep.executeBatch();
-				        conn.setAutoCommit(true);
-
-				        ResultSet rs = stat.executeQuery("select * from people;");
-				        while (rs.next()) {
-				            System.out.println("f-name = " + rs.getString("F_name"));
-				            System.out.println("l-name = " + rs.getString("L_name"));
-				        }
-				        rs.close();
-
-				        conn.close();
+			//Confirm the text that we printed
+			System.out.println("name is " + s1 + " " + s2);
+						
+			Class.forName("org.sqlite.JDBC");
+			Connection conn = DriverManager.getConnection("jdbc:sqlite:ttest.db");
+			Statement stat = conn.createStatement();
+			
+			//see if we have to initialize the database
+			//TODO: Move this to an initialize function
+			
+			stat.executeUpdate("drop table if exists people;");
+			stat.executeUpdate("create table people (F_name, L_name);");	
 					
-				}
-					catch(Exception e){System.out.println("exe");}
-			  }
+			PreparedStatement prep = conn.prepareStatement(
+					"insert into people values (?, ?);");
+			
+			prep.setString(1 , s1);
+			prep.setString(2 , s2);
+			prep.addBatch();
+
+			//execute commands in one go. Atomic operation
+			conn.setAutoCommit(false);
+			prep.executeBatch();
+			conn.setAutoCommit(true);
+
+			//Print out values we entered into the database
+			ResultSet rs = stat.executeQuery("select * from people;");
+			while (rs.next()) {
+				System.out.println("f-name = " + rs.getString("F_name"));
+				System.out.println("l-name = " + rs.getString("L_name"));
+			}
+			rs.close();
+			
+			conn.close();
+		}
+		catch(Exception e){System.out.println("exe");}		
+	}
+} // end gene_demo
+
+//the class used the call main
+//TODO: give the main() more responsibility and organize class structure
+class gene_jdbc
+{
+	public static void main(String arg[])
+	{
+		Gene gene = new Gene();
+	}
 }
-		
-
-
-		
-		
-		
-
