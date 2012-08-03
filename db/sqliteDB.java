@@ -1,3 +1,5 @@
+package db;
+
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -26,11 +28,11 @@ class Messages
  * Contains all the sqlite commands exposing only 
  * clean interfaces outside.
  */
-class sqliteDB 
+public class sqliteDB 
 {
 	
 	public static final String SQLITE_CLASS_FORMAT =  "org.sqlite.JDBC";
-	public static final String SQLITE_JDBC_DB = "jdbc:sqlite:gene.db";
+	public static final String SQLITE_JDBC_DB = "jdbc:sqlite:batman.db";
 	
 	private static sqliteDB instance = null;
 	
@@ -46,12 +48,14 @@ class sqliteDB
 	}
 
 	//Constructor
-	protected sqliteDB() throws Exception
+	public sqliteDB() throws Exception
 	{
 		boolean result = createTable(Constants.TABLE_NAME_PEOPLE);
 		result = createTable(Constants.TABLE_NAME_RELATION);
-		
 		System.out.println("Creating table status "+result);
+		
+		//Create Relationship hashmap that stores Relation ships as strings
+		Relation.mapRelationNameToEnum();
 	}
 	
 	private String constructCreateTableStmt(String table_name)
@@ -61,12 +65,12 @@ class sqliteDB
 		if(table_name == Constants.TABLE_NAME_PEOPLE)
 		{
 			// create table people (TEXT f_name, TEXT l_Name, INT age, INT id);
-			dbStmt = "create table "+Constants.TABLE_NAME_PEOPLE+" (f_name,l_name,age,id);" ;
+			dbStmt = "create table "+Constants.TABLE_NAME_PEOPLE+" (f_name TEXT,l_name TEXT,age number,id number);" ;
 		}
 		else if(table_name == Constants.TABLE_NAME_RELATION)
 		{
 			// create table relation (INT rel_name, INTEGER p1_id, INTEGER p2_id);
-			dbStmt = "create table "+Constants.TABLE_NAME_RELATION+" (rel_name,p1_id,p2_id);";
+			dbStmt = "create table "+Constants.TABLE_NAME_RELATION+" (rel_name number,p1_id number,p2_id number);";
 		}
 		System.out.println("Constructed statement: "+dbStmt);
 		return dbStmt;
@@ -111,9 +115,12 @@ class sqliteDB
 		return Constants.FALSE_VALUE;
 	}
 	
-
-
 	public boolean insertIntoTableRelation(Relationships relation, Person p1, Person p2) throws Exception
+	{
+		return insertIntoTableRelationWithId (relation, p1.getId(), p2.getId());
+	}
+
+	public boolean insertIntoTableRelationWithId(Relationships relation, int id1, int id2) throws Exception
 	{
 		Statement stat = null;
 		try
@@ -124,7 +131,7 @@ class sqliteDB
 			}
 			
 			stat = conn.createStatement();
-			String insertString = "insert into "+Constants.TABLE_NAME_RELATION+" values ("+relation+","+p1.getId()+","+p2.getId()+");";
+			String insertString = "insert into "+Constants.TABLE_NAME_RELATION+" values ("+relation+","+id1+","+id2+");";
 			conn.setAutoCommit(false);
 			stat.executeUpdate(insertString);
 			conn.setAutoCommit(true);
@@ -153,8 +160,8 @@ class sqliteDB
 			}
 			
 			stat = conn.createStatement();
-			
-			String insertString = "insert into "+Constants.TABLE_NAME_PEOPLE+" values ("+f_name+","+l_name+","+age+","+id+");" ;
+			// insert into tablename (collist) values (colvalues);
+			String insertString = "insert into "+Constants.TABLE_NAME_PEOPLE+" values ('"+f_name+"','"+l_name+"',"+age+","+id+");" ;
 			
 			conn.setAutoCommit(false);
 			stat.executeUpdate(insertString);
@@ -164,6 +171,7 @@ class sqliteDB
 		}
 		catch (Exception e) 
 		{
+			System.out.println(e);
 			System.out.println(Messages.ERR_PERSON_INSERTION);
 		}
 		finally{
@@ -211,4 +219,4 @@ class sqliteDB
 		}
 		return false;
 	}
-}
+} 

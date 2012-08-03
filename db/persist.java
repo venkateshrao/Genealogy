@@ -1,5 +1,6 @@
-// interface to the persistence module. SQLITE in our case
-// Can also be extended to xmlfile writes if sqlite is not preferred
+package db;
+//interface to the persistence module. SQLITE in our case
+//Can also be extended to xmlfile writes if sqlite is not preferred
 
 public class persist
 {
