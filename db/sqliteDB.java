@@ -6,12 +6,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 
 import javax.swing.JLabel;
 
+import UI.new_jtable;
+//import UI.jtable;
+import db.Person;
+//import net.proteanit.sql.DbUtils;
 //import UI.select_person;
 
 class Constants
@@ -23,7 +28,7 @@ class Constants
 	public static final String TABLE_NAME_RELATION = "relation";
 }
 
-class Messages
+ class Messages
 {
 	public static final String ERR_TABLE_CREATION = "sqliteDB Error: Error in table creation";
 	public static final String ERR_PERSON_INSERTION = "sqliteDB Error: Inserting Person failed";
@@ -192,9 +197,9 @@ public class sqliteDB
 		return Constants.FALSE_VALUE;
 	}
 	
-	public boolean selectFromTablePerson() throws Exception
-	{
+	/*public boolean update_table() throws Exception{
 		Statement stat = null;
+		PreparedStatement prep = null;
 		try
 		{
 			conn = getConnection();
@@ -203,17 +208,14 @@ public class sqliteDB
 			}
 			
 			stat = conn.createStatement();
-			 ResultSet rs = stat.executeQuery("select * from people;");
-		        while (rs.next()) {
-		        	//(f_name,l_name,age,id)
-		        	//JLabel lblNewLabel = new JLabel("");
-		        	//lblNewLabel.setText(rs.getString("f_name"));
-		            System.out.println("f-name = " + rs.getString("f_name"));
-		            System.out.println("l-name = " + rs.getString("l_name"));
-					System.out.println("l-name = " + rs.getInt("age"));
-		            System.out.println("l-name = " + rs.getInt("id"));
+			 String sql = "select * from people;";
+			 prep = conn.prepareStatement(sql);
+			 ResultSet rs = prep.executeQuery();
+			 table.setModel(DbUtils.resultSetToTableModel(rs));
+			 
+			 
 		        }
-		}
+		
 		catch (Exception e) 
 		{
 			System.out.println(e);
@@ -224,8 +226,62 @@ public class sqliteDB
 			conn.close();
 		}
 		return Constants.FALSE_VALUE;
-	}
+	}*/
 	
+	
+	public boolean selectFromTablePerson() throws Exception
+	{
+		Statement stat = null;
+		try
+		{
+			conn = getConnection();
+			if(conn == null){
+				throw new Exception("exception thrown");
+			}
+			
+			int i=0; int j=0;
+			stat = conn.createStatement();
+			 ResultSet rs = stat.executeQuery("select * from people;");
+			 Person[] personList = new Person[10];
+			 new_jtable jtable_object = new new_jtable();
+		        while (rs.next()) {
+		        	//(f_name,l_name,age,id)
+		        	//JLabel lblNewLabel = new JLabel("");
+		        	//lblNewLabel.setText(rs.getString("f_name"));
+		            System.out.println("f-name = " + rs.getString("f_name"));
+		            System.out.println("l-name = " + rs.getString("l_name"));
+					System.out.println("age = " + rs.getInt("age"));
+		            System.out.println("ID = " + rs.getInt("id"));
+		            
+		            //System.out.println(""+personList[i].getFirstName()); 
+		            if(personList[i]!=null)
+		           personList[i].setFirstName(rs.getString("f_name"));
+		            else
+		            	System.out.println("null pointer exception:");
+		          // System.out.println(personList[i].getFirstName());
+		           personList[i].setLastName(rs.getString("l_name"));
+		           personList[i].setAge(rs.getInt("age"));
+		           personList[i].setId(rs.getInt("id"));
+		            
+		            
+		           i++; 
+		            
+		        }
+		        jtable_object.putPersonIntoTable(personList);  
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			System.out.println(e);
+			System.out.println(Messages.ERR_PERSON_SELECTION);
+		}
+		finally{
+			stat.close();
+			conn.close();
+		}
+		return Constants.FALSE_VALUE;
+	}
+	/*
 	public static String[] headings(ResultSet rs){  
 		   String[] col;  
 		   try {  
@@ -262,7 +318,7 @@ public class sqliteDB
 		   }    
 		   return (Object[][]) data.toArray();  
 		}
-	
+	*/
 	public boolean deleteFromTablePerson(int id) throws Exception
 	{
 		Statement stat = null;
@@ -333,3 +389,14 @@ public class sqliteDB
 		return false;
 	}
 } 
+
+
+/*String [0][0] = "\""+personWithCommas(p)+"\"";
+
+String personWithCommas (Person p)
+{
+	String s1 = new String();
+	
+	s1 = p.getFirstName()+","+p.getLastName();
+	return s1;
+}*/

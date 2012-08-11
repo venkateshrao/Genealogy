@@ -14,8 +14,10 @@ import java.awt.event.ActionEvent;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import UI.new_jtable;
 
 //import db.Constants;
+//import db.Messages;
 //import db.Messages;
 import db.sqliteDB;
 import db.Person;
@@ -173,5 +175,24 @@ catch(Exception ex){
 		});
 		btnDeletePerson.setBounds(119, 142, 169, 42);
 		contentPane.add(btnDeletePerson);
+		
+		JButton btnNewButton = new JButton("View all person");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+				persist persist_object = new persist();
+				persist_object.selectAllPerson();
+				 new_jtable new_jtable_object = new new_jtable();
+				}
+				catch (Exception er) 
+				{
+					System.out.println(e);
+					System.out.println("Error in viewing all person :");
+				}
+					  
+			}
+		});
+		btnNewButton.setBounds(129, 201, 117, 25);
+		contentPane.add(btnNewButton);
 	}
 }
