@@ -11,12 +11,25 @@ import java.util.*;
 */
 
 public class Relation {
+	/*public enum Relationships {
+		REL_FATHER,
+		REL_MOTHER,
+		REL_SON,
+		REL_DAUGHTER,
+		REL_HUSBAND,
+		REL_WIFE,
+		REL_BROTHER,
+		REL_SISTER,
+		REL_MAX
+		
+	}*/
+
 	public Relation(){
 		
 	}
 
 	
-	public static void mapRelationNameToEnum() {
+	/*public static void mapRelationNameToEnum() {
 		HashMap<Relationships,String> hm = new HashMap<Relationships,String>(); 
 		// Put elements to the map 
 		hm.put(Relationships.REL_FATHER,"Father"); 
@@ -27,7 +40,7 @@ public class Relation {
 		hm.put(Relationships.REL_WIFE,"Wife");
 		hm.put(Relationships.REL_BROTHER,"Brother");
 		hm.put( Relationships.REL_SISTER,"Sister");
-	}
+	}*/
 	
 	public Relationships getRelationshipName() { return rel_name;}
 	public void setRelationshipName(Relationships rel) { rel_name = rel; }

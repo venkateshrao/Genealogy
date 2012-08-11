@@ -1,10 +1,18 @@
 package db;
 
 
+//import java.awt.List;
+import java.util.ArrayList;
+import java.util.List;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+
+import javax.swing.JLabel;
+
+//import UI.select_person;
 
 class Constants
 {
@@ -20,6 +28,9 @@ class Messages
 	public static final String ERR_TABLE_CREATION = "sqliteDB Error: Error in table creation";
 	public static final String ERR_PERSON_INSERTION = "sqliteDB Error: Inserting Person failed";
 	public static final String ERR_RELATION_INSERTION = "sqliteDB Error: Inserting Relation failed";
+	public static final String ERR_PERSON_DELETION = "sqliteDB Error: deleting Person failed";
+	public static final String ERR_RELATION_DELETION = "sqliteDB Error: deleting Relation failed";
+	public static final String ERR_PERSON_SELECTION = "sqliteDB Error: selection Person failed";
 }
 
 
@@ -55,7 +66,7 @@ public class sqliteDB
 		System.out.println("Creating table status "+result);
 		
 		//Create Relationship hashmap that stores Relation ships as strings
-		Relation.mapRelationNameToEnum();
+		//Relation.mapRelationNameToEnum();
 	}
 	
 	private String constructCreateTableStmt(String table_name)
@@ -173,6 +184,108 @@ public class sqliteDB
 		{
 			System.out.println(e);
 			System.out.println(Messages.ERR_PERSON_INSERTION);
+		}
+		finally{
+			stat.close();
+			conn.close();
+		}
+		return Constants.FALSE_VALUE;
+	}
+	
+	public boolean selectFromTablePerson() throws Exception
+	{
+		Statement stat = null;
+		try
+		{
+			conn = getConnection();
+			if(conn == null){
+				throw new Exception("exception thrown");
+			}
+			
+			stat = conn.createStatement();
+			 ResultSet rs = stat.executeQuery("select * from people;");
+		        while (rs.next()) {
+		        	//(f_name,l_name,age,id)
+		        	//JLabel lblNewLabel = new JLabel("");
+		        	//lblNewLabel.setText(rs.getString("f_name"));
+		            System.out.println("f-name = " + rs.getString("f_name"));
+		            System.out.println("l-name = " + rs.getString("l_name"));
+					System.out.println("l-name = " + rs.getInt("age"));
+		            System.out.println("l-name = " + rs.getInt("id"));
+		        }
+		}
+		catch (Exception e) 
+		{
+			System.out.println(e);
+			System.out.println(Messages.ERR_PERSON_SELECTION);
+		}
+		finally{
+			stat.close();
+			conn.close();
+		}
+		return Constants.FALSE_VALUE;
+	}
+	
+	public static String[] headings(ResultSet rs){  
+		   String[] col;  
+		   try {  
+		      ResultSetMetaData metadata = rs.getMetaData();  
+		      col = new String[metadata.getColumnCount()];  
+		  
+		      //int numcols;
+		      int numcols = rs.getMetaData().getColumnCount();
+			for(int count = 0; count < numcols; count++) {               
+		         col[count] = metadata.getColumnLabel(count + 1);  
+		      }  
+		   } catch(Exception e) {  
+		      throw new RuntimeException(e);  
+		   }    
+		   return col;  
+		}
+	
+	public static Object[][] data(ResultSet rs){  
+		   // The code below is basically the same as yours; I've just used a  
+		   // List for simplicity.  
+		   List<Object[]> data = new ArrayList<Object[]>();  
+		   try {  
+		      int numcols = rs.getMetaData().getColumnCount();  
+		  
+		      while (rs.next()) {    
+		         Object [] rowData = new Object[numcols];    
+		         for (int i = 0; i < rowData.length; ++i) {  
+		            rowData[i] = rs.getObject(i+1);    
+		         }  
+		         data.add(rowData);  
+		      }  
+		   } catch(Exception e) {  
+		      throw new RuntimeException(e);  
+		   }    
+		   return (Object[][]) data.toArray();  
+		}
+	
+	public boolean deleteFromTablePerson(int id) throws Exception
+	{
+		Statement stat = null;
+		try
+		{
+			conn = getConnection();
+			if(conn == null){
+				throw new Exception("exception thrown");
+			}
+			
+			stat = conn.createStatement();
+			String deleteString = "delete from "+Constants.TABLE_NAME_PEOPLE+" where id = "+id+";" ;
+			
+			conn.setAutoCommit(false);
+			stat.executeUpdate(deleteString);
+			conn.setAutoCommit(true);
+			
+			return Constants.TRUE_VALUE;
+		}
+		catch (Exception e) 
+		{
+			System.out.println(e);
+			System.out.println(Messages.ERR_PERSON_DELETION);
 		}
 		finally{
 			stat.close();

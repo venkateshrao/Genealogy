@@ -14,7 +14,7 @@ public class persist
 		return true;
 	}
 	
-	persist() throws Exception
+	public persist() throws Exception
 	{
 		boolean result = initializePersistence();
 	}
@@ -32,6 +32,22 @@ public class persist
 	{
 			
 		boolean result = dbHandle.insertIntoTableRelation(r_name, p1, p2);
+		return result;
+	}
+	
+	public boolean deletePerson(Person p1) throws Exception
+	{
+		
+		
+		boolean result = dbHandle.deleteFromTablePerson(p1.getId());
+		
+		return result;
+	}
+	
+	public boolean selectAllPerson() throws Exception
+	{
+			
+		boolean result = dbHandle.selectFromTablePerson();
 		return result;
 	}
 }
