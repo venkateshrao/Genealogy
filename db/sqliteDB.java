@@ -55,7 +55,7 @@ public class sqliteDB
 	private static sqliteDB instance = null;
 	
 	private Connection conn;
-	
+
 
 	//Method to expose the singleton instance
 	public static sqliteDB getInstance() throws Exception
@@ -246,7 +246,9 @@ public class sqliteDB
 			stat = conn.createStatement();
 			 ResultSet rs = stat.executeQuery("select * from people;");
 			// Person[] personList = new Person[20];
+
 			 ArrayList<Person> personList = new ArrayList<Person>();
+
 			 
 			
 			 while (rs.next()) {
@@ -298,6 +300,14 @@ public class sqliteDB
 			if(conn == null){
 				throw new Exception("exception thrown");
 			}
+			 ArrayList<Person> relList = new ArrayList<Person>();
+			
+			/*void putRelation(ArrayList<Person> personList){
+				for(int number = 0 ; number < personList.size() ; number++){
+					personList.add(new Person());
+					relList.get(number) = personList.get(number);
+				}
+			}*/
 			
 			int i=0 , j=0;
 			String Fname = new String();
@@ -308,7 +318,7 @@ public class sqliteDB
 			stat = conn.createStatement();
 			 ResultSet rs = stat.executeQuery("select * from relation ;");
 			// Person[] personList = new Person[20];
-			 Object[][] tabulateRelation = new Object[20][20];
+			 Object[][] relationObject = new Object[20][20];
 			// ArrayList<Object[][]> relationList = new ArrayList<Object[][]>();
 			 //ArrayList<Object[][]> relationList1 = {{}};
 			 while (rs.next()) {
@@ -358,15 +368,15 @@ public class sqliteDB
 		           //personList.get(i).setAge(rs.getInt("age"));
 		           //personList.get(i).setId(rs.getInt("id"));
 		            for(i = 0 ; i< 30 ; i++){
-		            	tabulateRelation[i][j] = Relname;
-		            	tabulateRelation[i][j+1] = Fullname1;
-		            	tabulateRelation[i][j+2] = Fullname2;
+		            	relationObject[i][j] = Relname;
+		            	relationObject[i][j+1] = Fullname1;
+		            	relationObject[i][j+2] = Fullname2;
 		            }
 		            
 		           
 		            
 		        }
-		        relation_jtable.putPersonNameIntoJTable(tabulateRelation);
+		        relation_jtable.putPersonNameIntoJTable(relationObject);
 		}
 		catch (Exception e) 
 		{

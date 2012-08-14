@@ -125,7 +125,7 @@ public class text_form extends JFrame {
 				catch(Exception ex){
 					
 					//	System.out.println(e.getMessage());
-					System.out.println("error in action performed method :");
+					System.out.println("error in action performed method of person form :");
 						ex.printStackTrace();
 						
 					}

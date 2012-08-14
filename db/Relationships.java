@@ -1,14 +1,14 @@
 package db;
 
 public enum Relationships {
-	FATHER("Father"),
-	MOTHER("Mother"),
-	SON("Son"),
-	DAUGHTER("Daughter"),
-	HUSBAND("Husband"),
-	WIFE("Wife"),
-	BROTHER("Brother"),
-	SISTER("Sister"),
+	FATHER("Father of"),
+	MOTHER("Mother of"),
+	SON("Son of"),
+	DAUGHTER("Daughter of"),
+	HUSBAND("Husband of"),
+	WIFE("Wife of"),
+	BROTHER("Brother of"),
+	SISTER("Sister of"),
 	MAX("Max");
 	
 	private final String rel_name;
@@ -20,6 +20,7 @@ public enum Relationships {
 		
 		
 	}
+	//Relationships(){ rel_name = null;}
 	/*Relationships(int num){
 		rel_num = num;
 	}*/
