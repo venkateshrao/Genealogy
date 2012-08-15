@@ -300,7 +300,7 @@ public class sqliteDB
 			if(conn == null){
 				throw new Exception("exception thrown");
 			}
-			 ArrayList<Person> relList = new ArrayList<Person>();
+			// ArrayList<Person> relList = new ArrayList<Person>();
 			
 			/*void putRelation(ArrayList<Person> personList){
 				for(int number = 0 ; number < personList.size() ; number++){
@@ -309,39 +309,66 @@ public class sqliteDB
 				}
 			}*/
 			
-			int i=0 , j=0;
+			int i=0 , j=0 , k=0;
 			String Fname = new String();
 			String Lname = new String();
 			String Fullname1 = new String();
 			String Fullname2 = new String();
 			String Relname = new String();
 			stat = conn.createStatement();
-			 ResultSet rs = stat.executeQuery("select * from relation ;");
+			// ResultSet rs = stat.executeQuery("select * from relation ;");
+			 ResultSet rs2 = stat.executeQuery("select f_name,l_name,id from people;");
 			// Person[] personList = new Person[20];
 			 Object[][] relationObject = new Object[20][20];
-			// ArrayList<Object[][]> relationList = new ArrayList<Object[][]>();
+			ArrayList<Person> relationList = new ArrayList<Person>();
+			System.out.println("select from table relation method :");
+			while(rs2.next()){
+				 relationList.add(new Person());
+				 System.out.println("relationList is populated :");
+				 if(relationList.get(i)!=null)
+		            	relationList.get(i).setFirstName(rs2.getString("f_name"));
+		            else
+		            	System.out.println("null pointer exception:");
+				 relationList.get(i).setLastName(rs2.getString("l_name"));
+				 System.out.println(rs2.getString("l_name"));
+		            relationList.get(i).setId(rs2.getInt("id"));
+		            System.out.println("the ID is : "+rs2.getInt("id"));
+		            
+		          i++;
+			}
+			System.out.println("rs2 ends :");
+			stat = conn.createStatement();
+			 ResultSet rs = stat.executeQuery("select * from relation ;");
 			 //ArrayList<Object[][]> relationList1 = {{}};
 			 while (rs.next()) {
-				// relationList.add((Object[][]) new Object());
+				 System.out.println("tabulateRelation begins :");
+				
+				//System.out.println(""+personList[i].getFirstName()); 
+		            
+		          // System.out.println(personList[i].getFirstName());
+		            
+		            //relationList.get(i).setId(rs.getInt("id"));
 				 Relname = rs.getString("rel_name");
 				 System.out.println("Relation name = "+Relname);
-				 System.out.println(personList.get(1).getFirstName());
-				 for(int num = 0; num<personList.size();num++){
-					 System.out.println(personList.get(num).getFirstName());
-					 if(personList.get(num).getId() == rs.getInt("p1_id")){
+				 System.out.println(rs.getInt("p1_id"));
+				// System.out.println(relationList.get(1).getFirstName());
+				 for(int num = 0; num<relationList.size();num++){
+					 System.out.println("id : "+relationList.get(num).getId());
+					 System.out.println("first name : "+relationList.get(num).getFirstName());
+					 if(relationList.get(num).getId() == rs.getInt("p1_id")){
 						// Fullname1 = new String();
-						 Fname = personList.get(num).getFirstName();
-						 Lname = personList.get(num).getLastName();
+						 Fname = relationList.get(num).getFirstName();
+						 Lname = relationList.get(num).getLastName();
 						 Fullname1 = Fname+" "+Lname;
 					 }
 						 
 				 }
 				 
-				 for(int num = 0 ; num <personList.size() ; num++){
-					 if(personList.get(num).getId() == + rs.getInt("p2_id")){
+				 for(int num = 0 ; num <relationList.size() ; num++){
+					 if(relationList.get(num).getId() == + rs.getInt("p2_id")){
 						 //Fullname2 = new String();
-						 Fname = personList.get(num).getFirstName();
-						 Lname = personList.get(num).getLastName();
+						 Fname = relationList.get(num).getFirstName();
+						 Lname = relationList.get(num).getLastName();
 						 Fullname2 = Fname+" "+Lname;
 					 }
 				 }
@@ -367,11 +394,13 @@ public class sqliteDB
 		          // personList.get(i).setLastName(rs.getString("l_name"));
 		           //personList.get(i).setAge(rs.getInt("age"));
 		           //personList.get(i).setId(rs.getInt("id"));
-		            for(i = 0 ; i< 30 ; i++){
-		            	relationObject[i][j] = Relname;
-		            	relationObject[i][j+1] = Fullname1;
-		            	relationObject[i][j+2] = Fullname2;
+		            k++;
 		            }
+			 for(i = 0 ; i< k ; i++){
+	            	relationObject[i][j] = Relname;
+	            	System.out.println(relationObject[i][j]);
+	            	relationObject[i][j+1] = Fullname1;
+	            	relationObject[i][j+2] = Fullname2;
 		            
 		           
 		            
