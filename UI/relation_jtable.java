@@ -17,7 +17,7 @@ import db.Person;
 public class relation_jtable {
 	
 	public String[] columnNames = {"Relation name" , "Person1" , "Person2"};
-	private static Object[][] tabulateRelation = new Object[20][20];
+	private static Object[][] tabulateRelation = new Object[200][200];
 	static int i=0 , j=0;
     //private String[] _titles = new String[] {"Name", "Vage"};
     //private String[][] _data = new String[][] {{"Donald Duck", "100"},{"Mickey Mouse", "120"}};

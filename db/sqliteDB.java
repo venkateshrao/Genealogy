@@ -339,8 +339,11 @@ public class sqliteDB
 			System.out.println("rs2 ends :");
 			stat = conn.createStatement();
 			 ResultSet rs = stat.executeQuery("select * from relation ;");
+			 i=0;
 			 //ArrayList<Object[][]> relationList1 = {{}};
 			 while (rs.next()) {
+			
+				// relationObject = new Object[i][];
 				 System.out.println("tabulateRelation begins :");
 				
 				//System.out.println(""+personList[i].getFirstName()); 
@@ -394,17 +397,20 @@ public class sqliteDB
 		          // personList.get(i).setLastName(rs.getString("l_name"));
 		           //personList.get(i).setAge(rs.getInt("age"));
 		           //personList.get(i).setId(rs.getInt("id"));
-		            k++;
+		           // k++;
+		            
+		            	relationObject[i][j] = Relname;
+		            	System.out.println("relname "+relationObject[i][j] + " "+ i +j);
+		            	relationObject[i][j+1] = Fullname1;
+		            	System.out.println("full name1 "+relationObject[i][j+1] + i + j+1 );
+		            	relationObject[i][j+2] = Fullname2;
+		            	System.out.println("full name2 "+relationObject[i][j+1] + i + j+2 );
+			         i++;  
+			            
+			        
 		            }
-			 for(i = 0 ; i< k ; i++){
-	            	relationObject[i][j] = Relname;
-	            	System.out.println(relationObject[i][j]);
-	            	relationObject[i][j+1] = Fullname1;
-	            	relationObject[i][j+2] = Fullname2;
-		            
-		           
-		            
-		        }
+			 
+			 
 		        relation_jtable.putPersonNameIntoJTable(relationObject);
 		}
 		catch (Exception e) 
