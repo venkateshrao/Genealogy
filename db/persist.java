@@ -28,7 +28,7 @@ public class persist
 		return result;
 	}
 	
-	public boolean createNewRelationship(Relationships r_name,Person p1, Person p2) throws Exception
+	public boolean createNewRelationship(Object r_name,Person p1, Person p2) throws Exception
 	{
 			
 		boolean result = dbHandle.insertIntoTableRelation(r_name, p1, p2);
@@ -48,6 +48,20 @@ public class persist
 	{
 			
 		boolean result = dbHandle.selectFromTablePerson();
+		return result;
+	}
+	
+	public boolean selectPersonName() throws Exception
+	{
+			
+		boolean result = dbHandle.selectNameFromTablePerson();
+		return result;
+	}
+	
+	public boolean selectAllRelation() throws Exception
+	{
+			
+		boolean result = dbHandle.selectFromTableRelation();
 		return result;
 	}
 }

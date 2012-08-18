@@ -75,16 +75,26 @@ public class form extends JFrame {
 		JButton btnRelationshipForm = new JButton("Relationship Form");
 		btnRelationshipForm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				EventQueue.invokeLater(new Runnable() {
-					public void run() {
-						try {
-							relation_form frame = new relation_form();
-							frame.setVisible(true);
-						} catch (Exception e) {
-							e.printStackTrace();
+				try{
+					persist persist_object = new persist();
+					persist_object.selectPersonName();
+					EventQueue.invokeLater(new Runnable() {
+						public void run() {
+							try {
+								relation_form frame = new relation_form();
+								frame.setVisible(true);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 						}
+					});
 					}
-				});
+					catch (Exception er) 
+					{
+						System.out.println(e);
+						System.out.println("Error in viewing all person :");
+					}
+					
 			}
 		});
 		btnRelationshipForm.setBounds(119, 75, 169, 42);
@@ -194,5 +204,24 @@ catch(Exception ex){
 		});
 		btnNewButton.setBounds(129, 201, 117, 25);
 		contentPane.add(btnNewButton);
+		
+		JButton btnViewAllRelations = new JButton("View all relations");
+		btnViewAllRelations.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				try{
+					persist persist_object = new persist();
+					persist_object.selectAllRelation();
+					 relation_jtable rel_table = new relation_jtable();
+					}
+					catch (Exception er) 
+					{
+						System.out.println(e);
+						System.out.println("Error in viewing all person :");
+					}
+			}
+		});
+		btnViewAllRelations.setBounds(139, 233, 117, 25);
+		contentPane.add(btnViewAllRelations);
 	}
 }

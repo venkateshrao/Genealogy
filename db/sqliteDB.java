@@ -14,6 +14,8 @@ import java.sql.Statement;
 import javax.swing.JLabel;
 
 import UI.new_jtable;
+import UI.relation_form;
+import UI.relation_jtable;
 //import UI.jtable;
 import db.Person;
 //import net.proteanit.sql.DbUtils;
@@ -53,6 +55,7 @@ public class sqliteDB
 	private static sqliteDB instance = null;
 	
 	private Connection conn;
+
 
 	//Method to expose the singleton instance
 	public static sqliteDB getInstance() throws Exception
@@ -131,12 +134,12 @@ public class sqliteDB
 		return Constants.FALSE_VALUE;
 	}
 	
-	public boolean insertIntoTableRelation(Relationships relation, Person p1, Person p2) throws Exception
+	public boolean insertIntoTableRelation(Object relation, Person p1, Person p2) throws Exception
 	{
 		return insertIntoTableRelationWithId (relation, p1.getId(), p2.getId());
 	}
 
-	public boolean insertIntoTableRelationWithId(Relationships relation, int id1, int id2) throws Exception
+	public boolean insertIntoTableRelationWithId(Object relation, int id1, int id2) throws Exception
 	{
 		Statement stat = null;
 		try
@@ -147,7 +150,7 @@ public class sqliteDB
 			}
 			
 			stat = conn.createStatement();
-			String insertString = "insert into "+Constants.TABLE_NAME_RELATION+" values ("+relation+","+id1+","+id2+");";
+			String insertString = "insert into "+Constants.TABLE_NAME_RELATION+" values ('"+relation+"',"+id1+","+id2+");";
 			conn.setAutoCommit(false);
 			stat.executeUpdate(insertString);
 			conn.setAutoCommit(true);
@@ -239,12 +242,18 @@ public class sqliteDB
 				throw new Exception("exception thrown");
 			}
 			
-			int i=0; int j=0;
+			int i=0; 
 			stat = conn.createStatement();
 			 ResultSet rs = stat.executeQuery("select * from people;");
-			 Person[] personList = new Person[10];
-			 new_jtable jtable_object = new new_jtable();
-		        while (rs.next()) {
+			// Person[] personList = new Person[20];
+
+			 ArrayList<Person> personList = new ArrayList<Person>();
+
+			 
+			
+			 while (rs.next()) {
+				 personList.add(new Person());
+		        	//personList[i] = new Person();
 		        	//(f_name,l_name,age,id)
 		        	//JLabel lblNewLabel = new JLabel("");
 		        	//lblNewLabel.setText(rs.getString("f_name"));
@@ -254,20 +263,212 @@ public class sqliteDB
 		            System.out.println("ID = " + rs.getInt("id"));
 		            
 		            //System.out.println(""+personList[i].getFirstName()); 
-		            if(personList[i]!=null)
-		           personList[i].setFirstName(rs.getString("f_name"));
+		            if(personList.get(i)!=null)
+		           personList.get(i).setFirstName(rs.getString("f_name"));
 		            else
 		            	System.out.println("null pointer exception:");
 		          // System.out.println(personList[i].getFirstName());
-		           personList[i].setLastName(rs.getString("l_name"));
-		           personList[i].setAge(rs.getInt("age"));
-		           personList[i].setId(rs.getInt("id"));
+		           personList.get(i).setLastName(rs.getString("l_name"));
+		           personList.get(i).setAge(rs.getInt("age"));
+		           personList.get(i).setId(rs.getInt("id"));
 		            
 		            
 		           i++; 
 		            
 		        }
-		        jtable_object.putPersonIntoTable(personList);  
+		        new_jtable.putPersonIntoTable(personList);  
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			System.out.println(e);
+			System.out.println(Messages.ERR_PERSON_SELECTION);
+		}
+		finally{
+			stat.close();
+			conn.close();
+		}
+		return Constants.FALSE_VALUE;
+	}
+	
+	public boolean selectFromTableRelation() throws Exception
+	{
+		Statement stat = null;
+		try
+		{
+			conn = getConnection();
+			if(conn == null){
+				throw new Exception("exception thrown");
+			}
+			// ArrayList<Person> relList = new ArrayList<Person>();
+			
+			/*void putRelation(ArrayList<Person> personList){
+				for(int number = 0 ; number < personList.size() ; number++){
+					personList.add(new Person());
+					relList.get(number) = personList.get(number);
+				}
+			}*/
+			
+			int i=0 , j=0 , k=0;
+			String Fname = new String();
+			String Lname = new String();
+			String Fullname1 = new String();
+			String Fullname2 = new String();
+			String Relname = new String();
+			stat = conn.createStatement();
+			// ResultSet rs = stat.executeQuery("select * from relation ;");
+			 ResultSet rs2 = stat.executeQuery("select f_name,l_name,id from people;");
+			// Person[] personList = new Person[20];
+			 Object[][] relationObject = new Object[20][20];
+			ArrayList<Person> relationList = new ArrayList<Person>();
+			System.out.println("select from table relation method :");
+			while(rs2.next()){
+				 relationList.add(new Person());
+				 System.out.println("relationList is populated :");
+				 if(relationList.get(i)!=null)
+		            	relationList.get(i).setFirstName(rs2.getString("f_name"));
+		            else
+		            	System.out.println("null pointer exception:");
+				 relationList.get(i).setLastName(rs2.getString("l_name"));
+				 System.out.println(rs2.getString("l_name"));
+		            relationList.get(i).setId(rs2.getInt("id"));
+		            System.out.println("the ID is : "+rs2.getInt("id"));
+		            
+		          i++;
+			}
+			System.out.println("rs2 ends :");
+			stat = conn.createStatement();
+			 ResultSet rs = stat.executeQuery("select * from relation ;");
+			 i=0;
+			 //ArrayList<Object[][]> relationList1 = {{}};
+			 while (rs.next()) {
+			
+				// relationObject = new Object[i][];
+				 System.out.println("tabulateRelation begins :");
+				
+				//System.out.println(""+personList[i].getFirstName()); 
+		            
+		          // System.out.println(personList[i].getFirstName());
+		            
+		            //relationList.get(i).setId(rs.getInt("id"));
+				 Relname = rs.getString("rel_name");
+				 System.out.println("Relation name = "+Relname);
+				 System.out.println(rs.getInt("p1_id"));
+				// System.out.println(relationList.get(1).getFirstName());
+				 for(int num = 0; num<relationList.size();num++){
+					 System.out.println("id : "+relationList.get(num).getId());
+					 System.out.println("first name : "+relationList.get(num).getFirstName());
+					 if(relationList.get(num).getId() == rs.getInt("p1_id")){
+						// Fullname1 = new String();
+						 Fname = relationList.get(num).getFirstName();
+						 Lname = relationList.get(num).getLastName();
+						 Fullname1 = Fname+" "+Lname;
+					 }
+						 
+				 }
+				 
+				 for(int num = 0 ; num <relationList.size() ; num++){
+					 if(relationList.get(num).getId() == + rs.getInt("p2_id")){
+						 //Fullname2 = new String();
+						 Fname = relationList.get(num).getFirstName();
+						 Lname = relationList.get(num).getLastName();
+						 Fullname2 = Fname+" "+Lname;
+					 }
+				 }
+					 
+				// personList.add(new Person());
+		        	//personList[i] = new Person();
+		        	//(f_name,l_name,age,id)
+		        	//JLabel lblNewLabel = new JLabel("");
+		        	//lblNewLabel.setText(rs.getString("f_name"));
+		            System.out.println("rel_name = " + rs.getString("rel_name"));
+		            //System.out.println("l-name = " + rs.getString("l_name"));
+					System.out.println("p1_id = " + rs.getInt("p1_id"));
+					System.out.println(Fullname1);
+		            System.out.println("p2_id = " + rs.getInt("p2_id"));
+		            System.out.println(Fullname2);
+		            
+		            //System.out.println(""+personList[i].getFirstName()); 
+		          //  if(personList.get(i)!=null)
+		           //personList.get(i).setFirstName(rs.getString("f_name"));
+		            //else
+		            	//System.out.println("null pointer exception:");
+		          // System.out.println(personList[i].getFirstName());
+		          // personList.get(i).setLastName(rs.getString("l_name"));
+		           //personList.get(i).setAge(rs.getInt("age"));
+		           //personList.get(i).setId(rs.getInt("id"));
+		           // k++;
+		            
+		            	relationObject[i][j] = Relname;
+		            	System.out.println("relname "+relationObject[i][j] + " "+ i +j);
+		            	relationObject[i][j+1] = Fullname1;
+		            	System.out.println("full name1 "+relationObject[i][j+1] + i + j+1 );
+		            	relationObject[i][j+2] = Fullname2;
+		            	System.out.println("full name2 "+relationObject[i][j+1] + i + j+2 );
+			         i++;  
+			            
+			        
+		            }
+			 
+			 
+		        relation_jtable.putPersonNameIntoJTable(relationObject);
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			System.out.println(e);
+			System.out.println(" sqliteDB Error in displaying relation");
+			System.out.println(Messages.ERR_PERSON_SELECTION);
+		}
+		finally{
+			stat.close();
+			conn.close();
+		}
+		return Constants.FALSE_VALUE;
+	}
+	
+	public boolean selectNameFromTablePerson() throws Exception
+	{
+		Statement stat = null;
+		try
+		{
+			conn = getConnection();
+			if(conn == null){
+				throw new Exception("exception thrown");
+			}
+			
+			int i=0; 
+			stat = conn.createStatement();
+			 ResultSet rs = stat.executeQuery("select f_name,l_name,id from people;");
+			// Person[] personList = new Person[20];
+			 ArrayList<Person> personList = new ArrayList<Person>();
+			
+			 while (rs.next()) {
+				 personList.add(new Person());
+		        	//personList[i] = new Person();
+		        	//(f_name,l_name,age,id)
+		        	//JLabel lblNewLabel = new JLabel("");
+		        	//lblNewLabel.setText(rs.getString("f_name"));
+		            System.out.println("f-name = " + rs.getString("f_name"));
+		            System.out.println("l-name = " + rs.getString("l_name"));
+					//System.out.println("age = " + rs.getInt("age"));
+		            System.out.println("ID = " + rs.getInt("id"));
+		            
+		            //System.out.println(""+personList[i].getFirstName()); 
+		            if(personList.get(i)!=null)
+		           personList.get(i).setFirstName(rs.getString("f_name"));
+		            else
+		            	System.out.println("null pointer exception:");
+		          // System.out.println(personList[i].getFirstName());
+		           personList.get(i).setLastName(rs.getString("l_name"));
+		           //personList.get(i).setAge(rs.getInt("age"));
+		           personList.get(i).setId(rs.getInt("id"));
+		            
+		            
+		           i++; 
+		            
+		        }
+		        relation_form.putPersonNameIntoTable(personList);
 		}
 		catch (Exception e) 
 		{
