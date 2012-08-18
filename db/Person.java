@@ -1,5 +1,7 @@
 package db;
 
+import java.util.ArrayList;
+
 
 public class Person {
 	
@@ -23,8 +25,8 @@ public class Person {
 	public void setLastName(String name) { last_name = name; }
 	public void setAge(int years) { age = years; }
 	public void setId(int identification) { id = identification; }
-	public void addRelation(Relation r) {rel = r;}
-	public Relationships getRelation() { return rel.getRelationshipName(); }
+	public void addRelation(Relation r) {;}
+	//public Relationships getRelation() { ; }
 	
 	public String stringify()
 	{
@@ -43,6 +45,6 @@ public class Person {
 	private int id;
 	
 	//Person should have the list of relationships that he is involved in
-	private Relation rel;
+	private ArrayList<Relation> relationList;
 	
 }

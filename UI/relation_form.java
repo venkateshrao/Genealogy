@@ -47,7 +47,7 @@ public class relation_form extends JFrame {
 			}
 		});
 	}*/
-	
+/*
 	private static String[] tabulatePerson1 = new String[20];
 	private static String[] tabulatePerson2 = new String[20];
 	private static String[] tabulatePerson3 = new String[20];
@@ -60,28 +60,22 @@ public class relation_form extends JFrame {
 	static int i1,i2;
 	public int i3;
 	public static ArrayList<Person> pList =  new ArrayList<Person>();
-	
+
 	public static void putPersonNameIntoTable(ArrayList<Person> personList1){
 		pList = personList1;
-		//for(j = 0 ; j<personList1.size() ; j++)
-			//pList.get(j).setId(personList1.get(j).getId());
-		for(i = 0;i<personList1.size();i++)
-			{
-				tabulatePerson1[i] = personList1.get(i).getFirstName();
-				System.out.println(tabulatePerson1[i]);
-				tabulatePerson2[i] = personList1.get(i).getLastName();
-				System.out.println(tabulatePerson2[i]);
-				tabulatePerson3[i] = tabulatePerson1[i]+ " " +tabulatePerson2[i];
-				//tabulatePerson[i][j+2] = personList1.get(i).getAge();
-				//System.out.println(tabulatePerson[i][j+2]);
-				//tabulatePerson[i][j+3] = personList1.get(i).getId();
-				//System.out.println(tabulatePerson[i][j+3]);
-				
-			}
-		
-		
-	}
 
+		for(i = 0;i<personList1.size();i++)
+		{
+			tabulatePerson1[i] = personList1.get(i).getFirstName();
+			System.out.println(tabulatePerson1[i]);
+			tabulatePerson2[i] = personList1.get(i).getLastName();
+			System.out.println(tabulatePerson2[i]);
+			tabulatePerson3[i] = tabulatePerson1[i]+ " " +tabulatePerson2[i];				
+		}
+
+
+	}
+*/
 	/**
 	 * Create the frame.
 	 */
@@ -92,71 +86,73 @@ public class relation_form extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		/*int i =0;
-		for(Relationships rel:Relationships.values()){
-			str[i] = rel.get_rel_num();
-			i++;
-		}*/
-		
-		final JComboBox<Relationships> comboBox = new JComboBox<Relationships>();
-		comboBox.setModel(new DefaultComboBoxModel<Relationships>(db.Relationships.values()));
+
+		final JComboBox comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(db.Relationships.values()));
 		/*Initialization*/
 		comboBox.setSelectedIndex(0);
 		selectedRel = comboBox.getSelectedItem();
-	comboBox.addItemListener(new ItemListener() {
+		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange() == ItemEvent.SELECTED){
-				System.out.println(comboBox.getSelectedItem());
-				System.out.println("combobox item listener");
-				
-				selectedRel = comboBox.getSelectedItem();
-				
-				//db.Relationships rel = db.Relationships.values();
-				//db.Relationships.values() = comboBox.getSelectedObjects();
+					System.out.println(comboBox.getSelectedItem());
+					System.out.println("combobox item listener");
+
+					selectedRel = comboBox.getSelectedItem();
+
+					//db.Relationships rel = db.Relationships.values();
+					//db.Relationships.values() = comboBox.getSelectedObjects();
 				}
-				
+
 			}
 		});
-		
-		
+
+
 		comboBox.setBounds(176, 83, 128, 31);
 		contentPane.add(comboBox);
-		
+
 		JLabel lblRelationshipName = new JLabel("Relationship Name");
 		lblRelationshipName.setBounds(12, 99, 158, 15);
 		contentPane.add(lblRelationshipName);
-		
+
 		JLabel lblPersonId = new JLabel("person1 ID");
 		lblPersonId.setBounds(26, 28, 114, 15);
 		contentPane.add(lblPersonId);
-		
+
 		JLabel lblPersonId_1 = new JLabel("person2 ID");
 		lblPersonId_1.setBounds(42, 149, 98, 15);
 		contentPane.add(lblPersonId_1);
-		
+
 		JButton btnSubmit = new JButton("Submit");
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try{
-				persist persist_object = new persist();
-				persist_object.createNewRelationship(selectedRel, p1, p2);
-				
+					persist persist_object = new persist();
+					persist_object.createNewRelationship(selectedRel, p1, p2);
+
 				}
-				
+
 				catch(Exception ex){
-					
+
 					//	System.out.println(e.getMessage());
 					System.out.println("error in action performed method of Relation form :");
-						ex.printStackTrace();
-						
-					}
-				
+					ex.printStackTrace();
+
+				}
+
 			}
 		});
 		btnSubmit.setBounds(42, 218, 117, 25);
 		contentPane.add(btnSubmit);
+
+		ArrayList<String> listOfAllPeopleNames;
+		db.getAllNamesFromPeopleTable(listOfAllPeopleNames);
+		//placeList.toArray(new String[placeList.size()]);
 		
-		final JComboBox comboBox_1 = new JComboBox(tabulatePerson3);
+		String[] namesList = listOfAllPeopleNames.toArray(new String[listOfAllPeopleNames.size()]);
+		final JComboBox comboBox_1 = new JComboBox(namesList);
+		
+		//final JComboBox comboBox_1 = new JComboBox(tabulatePerson3);
 		/*Initialization*/
 		comboBox_1.setSelectedItem(tabulatePerson3[0]);
 		p1 = pList.get(0);
@@ -165,14 +161,18 @@ public class relation_form extends JFrame {
 				//String a[] = new String[20];
 				//a = tabulatePerson3;
 				//System.out.println("a is " +a[1]);
+
 				
 				
 				if(e.getStateChange() == ItemEvent.SELECTED){
 					System.out.println(comboBox_1.getSelectedItem());
 					System.out.println("combobox item listener");
-					
+
 					//p1 = (Person) comboBox.getSelectedItem();
 					selectedPerson1 = comboBox_1.getSelectedItem();
+					int p1_id = db.getIdFromFullName(selectedPerson1);
+					
+					/*
 					System.out.println("selected item is "+selectedPerson1);
 					for( i3 = 0 ; i3 < tabulatePerson3.length ; i3++){
 						System.out.println(tabulatePerson3.length);
@@ -184,35 +184,36 @@ public class relation_form extends JFrame {
 							p1 = pList.get(i3);
 							i1 = pList.get(i3).getId();
 							break;
-							
-							
+
+
 						}
 					}
+					*/
 					//System.out.println("pList id " +pList.get(i3).getId());
 					//System.out.println("tab per"+tabulatePerson3[i3]);
 					//System.out.println("pList id " +pList.get(i).getId());
 					//System.out.println("id is"+p1.getId());
-					
+
 					//System.out.println("the id is"+i1);
 					//db.Relationships rel = db.Relationships.values();
 					//db.Relationships.values() = comboBox.getSelectedObjects();
-					}
+				}
 			}
 		});
 		comboBox_1.setBounds(176, 12, 128, 35);
 		contentPane.add(comboBox_1);
-		
+
 		final JComboBox comboBox_2 = new JComboBox(tabulatePerson3);
 		/*Initialization*/
 		comboBox_1.setSelectedItem(tabulatePerson3[0]);
 		p2 = pList.get(0);
 		comboBox_2.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-				
+
 				if(e.getStateChange() == ItemEvent.SELECTED){
 					System.out.println(comboBox_2.getSelectedItem());
 					System.out.println("combobox item listener");
-					
+
 					//p2 =  (Person) comboBox.getSelectedItem();
 					selectedPerson2 = comboBox_2.getSelectedItem();
 					for(i3 = 0 ; i3 < tabulatePerson3.length ; i3++){
@@ -223,17 +224,17 @@ public class relation_form extends JFrame {
 							p2 = pList.get(i3);
 							i2 = pList.get(i3).getId();
 							break;
-							
-							
+
+
 						}
 					}
-					
+
 					//System.out.println(p2.getId());
-					
+
 					//System.out.println(i2);
 					//db.Relationships rel = db.Relationships.values();
 					//db.Relationships.values() = comboBox.getSelectedObjects();
-					}
+				}
 			}
 		});
 		comboBox_2.setBounds(176, 144, 128, 31);

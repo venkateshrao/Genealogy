@@ -20,19 +20,7 @@ public enum Relationships {
 		
 		
 	}
-	//Relationships(){ rel_name = null;}
-	/*Relationships(int num){
-		rel_num = num;
-	}*/
 	
-	/*public String get_rel_name(){
-		return rel_name;
-		
-	}
-	
-	public String get_rel_num(){
-		return rel_num;
-	}*/
 	@Override
 	    public String toString() {
 	        return rel_name;

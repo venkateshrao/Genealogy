@@ -14,6 +14,8 @@ import java.awt.event.ActionEvent;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+
 import UI.new_jtable;
 
 //import db.Constants;
@@ -87,16 +89,16 @@ public class form extends JFrame {
 								e.printStackTrace();
 							}
 						}
-					});
+					  });
 					}
 					catch (Exception er) 
 					{
 						System.out.println(e);
 						System.out.println("Error in viewing all person :");
-					}
-					
+					}					
 			}
 		});
+		
 		btnRelationshipForm.setBounds(119, 75, 169, 42);
 		contentPane.add(btnRelationshipForm);
 		
@@ -115,84 +117,20 @@ public class form extends JFrame {
 					}
 				});
 				
-				/*EventQueue.invokeLater(new Runnable() {
-					public void run() {
-						try {
-							select_person frame = new select_person();
-							frame.setVisible(true);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				});*/
-			/*	public TableModel queryAsModel(String query) {  
-					sqliteDB dbs = sqliteDB.getInstance();   
-					TableModel dtm_search_model;  
-					   Statement stat = null;
-						Connection conn;
-						try
-						{
-							conn = dbs.getConnection();
-							if(conn == null){
-								throw new Exception("exception thrown");
-								
-							}
-						
-							
-							stat = conn.createStatement();
-							 ResultSet rs = stat.executeQuery(query);
-							 dtm_search_model = new DefaultTableModel(  
-							         sqliteDB.data(rs),  
-							         sqliteDB.headings(rs));  
-							   } catch(Exception e) {  
-							      throw new RuntimeException(e);  
-							   }  
-						
-						stat.close();
-						conn.close();
-							   return dtm_search_model;  
-				
-				}	*/
-					
-						       
-						
-						/*catch (Exception e) 
-						{
-							System.out.println(e);
-							System.out.println(Messages.ERR_PERSON_SELECTION);
-						}*/
-						
-							
-						
-						//return Constants.FALSE_VALUE;
-					
-				
-				
-				/*try{
-					persist persist_form_object = new persist();
-					persist_form_object.selectAllPerson();
-				}
-				
-catch(Exception ex){
-					
-					//	System.out.println(e.getMessage());
-					System.out.println("error in action performed method of selecting persons :");
-						ex.printStackTrace();
-						
-					}*/
-				
 			}
 		});
 		btnDeletePerson.setBounds(119, 142, 169, 42);
 		contentPane.add(btnDeletePerson);
 		
 		JButton btnNewButton = new JButton("View all person");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		
+		btnNewButton.addActionListener( new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
 				try{
 				persist persist_object = new persist();
-				persist_object.selectAllPerson();
-				 new_jtable new_jtable_object = new new_jtable();
+				ArrayList<Person> personList = new ArrayList<Person>();
+				persist_object.selectAllPerson(personList);
+				new_jtable new_jtable_object = new new_jtable(personList);
 				}
 				catch (Exception er) 
 				{
@@ -201,7 +139,8 @@ catch(Exception ex){
 				}
 					  
 			}
-		});
+		}
+		);
 		btnNewButton.setBounds(129, 201, 117, 25);
 		contentPane.add(btnNewButton);
 		

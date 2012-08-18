@@ -1,4 +1,6 @@
 package db;
+
+import java.util.ArrayList;
 //interface to the persistence module. SQLITE in our case
 //Can also be extended to xmlfile writes if sqlite is not preferred
 
@@ -44,10 +46,10 @@ public class persist
 		return result;
 	}
 	
-	public boolean selectAllPerson() throws Exception
+	public boolean selectAllPerson(ArrayList<Person> personList) throws Exception
 	{
 			
-		boolean result = dbHandle.selectFromTablePerson();
+		boolean result = dbHandle.selectFromTablePerson(personList);
 		return result;
 	}
 	
@@ -61,7 +63,7 @@ public class persist
 	public boolean selectAllRelation() throws Exception
 	{
 			
-		boolean result = dbHandle.selectFromTableRelation();
+		boolean result = dbHandle.showAllRelationsForDisplay();
 		return result;
 	}
 }

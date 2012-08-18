@@ -14,45 +14,42 @@ import db.Person;
  * @author http://www.gammelsaeter.com/
  */
 public class new_jtable {
-	
+
 	public String[] columnNames = {"f_name" , "l_name" , "age" , "ID"};
-	private static Object[][] tabulatePerson = new Object[20][20];
-	static int i=0 , j=0;
-    //private String[] _titles = new String[] {"Name", "Vage"};
-    //private String[][] _data = new String[][] {{"Donald Duck", "100"},{"Mickey Mouse", "120"}};
-    
-    public static void putPersonIntoTable(ArrayList<Person> personList1){
-		for(i = 0;i<personList1.size();i++)
-			{
-				tabulatePerson[i][j] = personList1.get(i).getFirstName();
-				System.out.println(tabulatePerson[i][j]);
-				tabulatePerson[i][j+1] = personList1.get(i).getLastName();
-				System.out.println(tabulatePerson[i][j+1]);
-				tabulatePerson[i][j+2] = personList1.get(i).getAge();
-				System.out.println(tabulatePerson[i][j+2]);
-				tabulatePerson[i][j+3] = personList1.get(i).getId();
-				System.out.println(tabulatePerson[i][j+3]);
-				
-			}
-		i++;
-		
+	private Object[][] tabulatePerson = new Object[20][20];
+
+	private void createPersonListTabulation(ArrayList<Person> personList1){
+		for(int i=0,j=0;i<personList1.size();i++)
+		{
+			tabulatePerson[i][j] = personList1.get(i).getFirstName();
+			System.out.println(tabulatePerson[i][j]);
+			tabulatePerson[i][j+1] = personList1.get(i).getLastName();
+			System.out.println(tabulatePerson[i][j+1]);
+			tabulatePerson[i][j+2] = personList1.get(i).getAge();
+			System.out.println(tabulatePerson[i][j+2]);
+			tabulatePerson[i][j+3] = personList1.get(i).getId();
+			System.out.println(tabulatePerson[i][j+3]);
+
+		}
 	}
 
-    public new_jtable() {
-        // Make the frame
-        JFrame frame = new JFrame("JFrame and JTable example 2");
-        frame.setSize(300, 100);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   // Action when window closes
+	public new_jtable(ArrayList<Person> personList) {
+		// Make the frame
 
-        JTable table = new JTable(tabulatePerson, columnNames);              // Make table
-        JScrollPane scrollPane = new JScrollPane(table);        // Make scrollpane with table
+		createPersonListTabulation(personList);
+		JFrame frame = new JFrame("JFrame and JTable example 2");
+		frame.setSize(300, 100);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   // Action when window closes
 
-        // Add scrollpane with table to the frame and show the frame to user
-        frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
-        frame.setVisible(true);
-    }
+		JTable table = new JTable(tabulatePerson, columnNames);              // Make table
+		JScrollPane scrollPane = new JScrollPane(table);        // Make scrollpane with table
 
-   /* public static void main(String args[]) {
+		// Add scrollpane with table to the frame and show the frame to user
+		frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
+		frame.setVisible(true);
+	}
+
+	/* public static void main(String args[]) {
         new_jtable = new new_jtable();
     }*/
 }
