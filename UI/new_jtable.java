@@ -49,7 +49,4 @@ public class new_jtable {
 		frame.setVisible(true);
 	}
 
-	/* public static void main(String args[]) {
-        new_jtable = new new_jtable();
-    }*/
 }

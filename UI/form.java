@@ -78,8 +78,6 @@ public class form extends JFrame {
 		btnRelationshipForm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try{
-					persist persist_object = new persist();
-					persist_object.selectPersonName();
 					EventQueue.invokeLater(new Runnable() {
 						public void run() {
 							try {
@@ -150,8 +148,9 @@ public class form extends JFrame {
 				
 				try{
 					persist persist_object = new persist();
-					persist_object.selectAllRelation();
-					 relation_jtable rel_table = new relation_jtable();
+					String[][] relationObject = new String[20][20];
+					persist_object.selectAllRelation(relationObject);
+					 relation_jtable rel_table = new relation_jtable(relationObject);
 					}
 					catch (Exception er) 
 					{

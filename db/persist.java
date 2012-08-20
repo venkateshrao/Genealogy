@@ -30,10 +30,10 @@ public class persist
 		return result;
 	}
 	
-	public boolean createNewRelationship(Object r_name,Person p1, Person p2) throws Exception
+	public boolean createNewRelationship(Object r_name,int p1, int p2) throws Exception
 	{
 			
-		boolean result = dbHandle.insertIntoTableRelation(r_name, p1, p2);
+		boolean result = dbHandle.insertIntoTableRelationWithId(r_name, p1, p2);
 		return result;
 	}
 	
@@ -53,17 +53,17 @@ public class persist
 		return result;
 	}
 	
-	public boolean selectPersonName() throws Exception
+	/*public boolean selectPersonName() throws Exception
 	{
 			
 		boolean result = dbHandle.selectNameFromTablePerson();
 		return result;
-	}
+	}*/
 	
-	public boolean selectAllRelation() throws Exception
+	public boolean selectAllRelation(String[][] relationObject) throws Exception
 	{
 			
-		boolean result = dbHandle.showAllRelationsForDisplay();
+		boolean result = dbHandle.showAllRelationsForDisplay(relationObject);
 		return result;
 	}
 }

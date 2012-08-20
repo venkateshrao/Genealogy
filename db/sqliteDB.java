@@ -38,6 +38,7 @@ class Messages
 	public static final String ERR_PERSON_DELETION = "sqliteDB Error: deleting Person failed";
 	public static final String ERR_RELATION_DELETION = "sqliteDB Error: deleting Relation failed";
 	public static final String ERR_PERSON_SELECTION = "sqliteDB Error: selection Person failed";
+	public static final String ERR_DB_CONNECTION_FAILURE = "sqliteDB Error: DB connection faiure";
 }
 
 
@@ -214,8 +215,6 @@ public class sqliteDB
 			stat = conn.createStatement();
 			ResultSet rs = stat.executeQuery("select * from people;");
 
-			//ArrayList<Person> personList = new ArrayList<Person>();
-
 			while (rs.next()) {
 				personList.add(new Person());
 
@@ -253,7 +252,7 @@ public class sqliteDB
 		return Constants.FALSE_VALUE;
 	}
 	
-	public void getAllNamesFromPeopleTable(ArrayList<String> fullNamesList)
+	public void getAllNamesFromPeopleTable(ArrayList<String> fullNamesList) throws Exception
 	{
 		Statement stat = null;
 		try {
@@ -289,7 +288,7 @@ public class sqliteDB
 	// Description: This function returns the Full name of a person given his id
 	// Inputs: Integer Id
 	// Outputs: String FullName
-	public String getNameFromId(int id)
+	public String getNameFromId(int id) throws Exception
 	{
 		Statement stat = null;
 		String fullName = new String();
@@ -324,22 +323,47 @@ public class sqliteDB
 		
 	}
 	
-	public int getIdFromName(String fullName)
+	public int getIdFromFullName(String fullName)throws Exception
 	{
+
+		Statement stat = null;
 		String fname = fullName.split(" ").toString();
 		String lname = fullName;
 		
-		rs = select id from people where f_name = fname and l_name = lname;
+		try {
+			conn = getConnection();
+			if(conn == null){
+				throw new Exception("exception thrown");
+			}
+			stat = conn.createStatement();
+
+			//
+			String selectString = "select id from "+Constants.TABLE_NAME_PEOPLE+" where f_name = '"+fname+"' and l_name = '"+lname+"';";
+			ResultSet rs = stat.executeQuery(selectString);
+			if(rs.next())
+			{
+				int id = rs.getInt("id");
+				return id;
+			}
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			System.out.println(e);
+			System.out.println(Messages.ERR_DB_CONNECTION_FAILURE);
+		}
+		finally{
+			stat.close();
+			conn.close();
+		}
 		
-		
-		return id
+		return 0;
 	}
 
-	public boolean showAllRelationsForDisplay() throws Exception
+	public boolean showAllRelationsForDisplay(String[][] relationObject) throws Exception
 	{
 		Statement stat = null;
 		String RelName = new String();
-		Object[][] relationObject = new Object[20][20];
 		try
 		{
 			conn = getConnection();
@@ -367,7 +391,6 @@ public class sqliteDB
 
 			}
 
-			relation_jtable.putPersonNameIntoJTable(relationObject);
 		}
 		catch (Exception e) 
 		{
