@@ -3,6 +3,7 @@ package db;
 
 //import java.awt.List;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,6 +19,7 @@ import UI.relation_form;
 import UI.relation_jtable;
 //import UI.jtable;
 import db.Person;
+import UI.GraphJFaceSnippet2;
 //import net.proteanit.sql.DbUtils;
 //import UI.select_person;
 
@@ -51,7 +53,7 @@ public class sqliteDB
 {
 
 	public static final String SQLITE_CLASS_FORMAT =  "org.sqlite.JDBC";
-	public static final String SQLITE_JDBC_DB = "jdbc:sqlite:batman.db";
+	public static final String SQLITE_JDBC_DB = "jdbc:sqlite:test.db";
 
 	private static sqliteDB instance = null;
 
@@ -181,7 +183,7 @@ public class sqliteDB
 
 			stat = conn.createStatement();
 			// insert into tablename (collist) values (colvalues);
-			String insertString = "insert into "+Constants.TABLE_NAME_PEOPLE+" values ('"+f_name+"','"+l_name+"',"+age+","+id+");" ;
+			String insertString = "insert into "+Constants.TABLE_NAME_PEOPLE+" (f_name ,l_name ,age ,id ) values ('"+f_name+"','"+l_name+"',"+age+",(select max(id)+1 from people));" ;
 
 			conn.setAutoCommit(false);
 			stat.executeUpdate(insertString);
@@ -325,11 +327,12 @@ public class sqliteDB
 	
 	public int getIdFromFullName(String fullName)throws Exception
 	{
-
+		System.out.println("starting of get id from full name");
 		Statement stat = null;
-		String fname = fullName.split(" ").toString();
-		String lname = fullName;
-		
+		String fname[] = fullName.split(" ");
+		System.out.println("fname is "+fname[0]);
+		//String lname = fullName;
+		System.out.println("lname is "+fname[1]);
 		try {
 			conn = getConnection();
 			if(conn == null){
@@ -338,7 +341,7 @@ public class sqliteDB
 			stat = conn.createStatement();
 
 			//
-			String selectString = "select id from "+Constants.TABLE_NAME_PEOPLE+" where f_name = '"+fname+"' and l_name = '"+lname+"';";
+			String selectString = "select id from "+Constants.TABLE_NAME_PEOPLE+" where f_name = '"+fname[0]+"' and l_name = '"+fname[1]+"';";
 			ResultSet rs = stat.executeQuery(selectString);
 			if(rs.next())
 			{
@@ -360,7 +363,7 @@ public class sqliteDB
 		return 0;
 	}
 
-	public boolean showAllRelationsForDisplay(String[][] relationObject) throws Exception
+	public boolean showAllRelationsForDisplay(ArrayList<ArrayList<String>>relationObject) throws Exception
 	{
 		Statement stat = null;
 		String RelName = new String();
@@ -383,10 +386,18 @@ public class sqliteDB
 					
 				System.out.println(p1_fullName);
 				System.out.println(p2_fullName);
+				
+				for (int col = 0; col < 3; col++)
+	        	{
+					relationObject.get(i).add(RelName);
+					relationObject.get(i).add(p1_fullName);
+					relationObject.get(i).add(p2_fullName);
+	        		
+	        	}
 
-				relationObject[i][j] = RelName;
-				relationObject[i][j+1] = p1_fullName;
-				relationObject[i][j+2] = p2_fullName;
+				//relationObject[i][j] = RelName;
+				//relationObject[i][j+1] = p1_fullName;
+				//relationObject[i][j+2] = p2_fullName;
 				i++;  
 
 			}
@@ -404,6 +415,110 @@ public class sqliteDB
 			conn.close();
 		}
 		return Constants.FALSE_VALUE;
+	}
+	
+	public void showAllRelationsForDisplayInGraph(ArrayList<ArrayList<String>> relationObject , int selectedId) throws Exception
+	{
+		System.out.println("starting of showAllRelationsForDisplayInGraph");
+		relationObject.add(new ArrayList<String>());
+		Statement stat = null;
+		String RelName = new String();
+		//ArrayList<ArrayList<String>> listOfList = new ArrayList<ArrayList<String>>();
+		//GraphJFaceSnippet2 gef_object = new GraphJFaceSnippet2();
+		//ArrayList<String[][]> str = new ArrayList<String[][]>();
+		HashMap<String,String> HM = new HashMap<String,String>();
+		try
+		{
+			conn = getConnection();
+			if(conn == null){
+				throw new Exception("exception thrown");
+			}
+
+			stat = conn.createStatement();
+			ResultSet rs = stat.executeQuery("select * from relation where p1_id ="+ selectedId+";");
+			
+			int i=0,j=0;
+			while (rs.next()) {
+				relationObject.add(new ArrayList<String>());
+
+				RelName = rs.getString("rel_name");
+				
+				String p1_fullName = getNameFromId(rs.getInt("p1_id"));
+				String p2_fullName = getNameFromId(rs.getInt("p2_id"));
+					
+				System.out.println(p1_fullName);
+				System.out.println(p2_fullName);
+				
+				for (int col = 0; col < 3; col++)
+	        	{
+					relationObject.get(i).add(RelName);
+					relationObject.get(i).add(p1_fullName);
+					relationObject.get(i).add(p2_fullName);
+	        		
+	        	}
+
+				//relationObject.get(i)[j] = RelName;
+				//relationObject[i][j+1] = p1_fullName;
+				//relationObject[i][j+2] = p2_fullName;
+				HM.put(p1_fullName, null);
+				HM.put(p2_fullName,null);
+				i++;  
+
+			}
+			
+			ResultSet rs2 = stat.executeQuery("select * from relation where p2_id ="+ selectedId+";");
+			while (rs2.next()) {
+				relationObject.add(new ArrayList<String>());
+
+				RelName = rs.getString("rel_name");
+				
+				String p1_fullName = getNameFromId(rs.getInt("p1_id"));
+				String p2_fullName = getNameFromId(rs.getInt("p2_id"));
+					
+				System.out.println(p1_fullName);
+				System.out.println(p2_fullName);
+				
+				for (int col = 0; col < 3; col++)
+	        	{
+					relationObject.get(i).add(RelName);
+					relationObject.get(i).add(p1_fullName);
+					relationObject.get(i).add(p2_fullName);
+	        		
+	        	}
+
+				//relationObject[i][j] = RelName;
+				//relationObject[i][j+1] = p1_fullName;
+				//relationObject[i][j+2] = p2_fullName;
+				HM.put(p1_fullName, null);
+				HM.put(p2_fullName,null);
+				i++;  
+
+			}
+			//System.out.println(relationObject[0][0]);
+			/*for (int k= 0 ; k<relationObject.length ; k++){
+				if(relationObject[k][0] == "Son of"){
+					System.out.println("k2 is "+relationObject[0][2]+" k1 is "+relationObject[0][1]);
+					str = relationObject;
+				}
+			}*/
+
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			System.out.println(e);
+			System.out.println(" sqliteDB Error in displaying relation");
+			System.out.println(Messages.ERR_PERSON_SELECTION);
+		}
+		finally{
+			stat.close();
+			conn.close();
+		}
+		final String[][] r = new String[relationObject.size()][];
+    	int i = 0;
+    	for (ArrayList<String> l : relationObject) 
+    	  r[i++] = l.toArray(new String[l.size()]);
+		GraphJFaceSnippet2.setRelationObject(r);
 	}
 
 	

@@ -60,10 +60,17 @@ public class persist
 		return result;
 	}*/
 	
-	public boolean selectAllRelation(String[][] relationObject) throws Exception
+	public boolean selectAllRelation(ArrayList<ArrayList<String>> relationObject) throws Exception
 	{
 			
 		boolean result = dbHandle.showAllRelationsForDisplay(relationObject);
 		return result;
+	}
+	
+	public void selectAllRelationForGraph(ArrayList<ArrayList<String>> relationObject , int selectedId) throws Exception
+	{
+			
+		 dbHandle.showAllRelationsForDisplayInGraph(relationObject , selectedId);
+		
 	}
 }

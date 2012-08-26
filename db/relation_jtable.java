@@ -17,20 +17,15 @@ import db.Person;
 public class relation_jtable {
 	
 	public String[] columnNames = {"Relation name" , "Person1" , "Person2"};
-	private static Object[][] tabulateRelation ;
+	private static Object[][] tabulateRelation = new Object[200][200];
 	
-    public relation_jtable(ArrayList<ArrayList<String>> relationObject) {
+    public relation_jtable(String[][] relationObject) {
         // Make the frame
-    	
-    	final String[][] r = new String[relationObject.size()][];
-    	int i = 0;
-    	for (ArrayList<String> l : relationObject) 
-    	  r[i++] = l.toArray(new String[l.size()]);
         JFrame frame = new JFrame("JFrame and JTable example 2");
         frame.setSize(300, 100);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   // Action when window closes
 
-        JTable table = new JTable(r, columnNames);              // Make table
+        JTable table = new JTable(relationObject, columnNames);              // Make table
         JScrollPane scrollPane = new JScrollPane(table);        // Make scrollpane with table
 
         // Add scrollpane with table to the frame and show the frame to user

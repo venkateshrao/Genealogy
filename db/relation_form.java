@@ -130,9 +130,6 @@ public class relation_form extends JFrame {
 		
 		/*Initialization*/
 		comboBox_1.setSelectedItem(namesList[0]);
-		selectedPerson1 = comboBox_1.getSelectedItem().toString();
-		sqliteDB Db = sqliteDB.getInstance();
-		p1_id = Db.getIdFromFullName(selectedPerson1);
 		comboBox_1.addItemListener(new ItemListener()  {
 			public void itemStateChanged(ItemEvent e) {
 		
@@ -144,7 +141,6 @@ public class relation_form extends JFrame {
 					selectedPerson1 = comboBox_1.getSelectedItem().toString();
 					sqliteDB db = sqliteDB.getInstance();
 					p1_id = db.getIdFromFullName(selectedPerson1);
-					System.out.println(p1_id);
 				}
 				}
 				catch(Exception E){
@@ -160,20 +156,17 @@ public class relation_form extends JFrame {
 
 		final JComboBox comboBox_2 = new JComboBox(namesList);
 		/*Initialization*/
-		comboBox_2.setSelectedItem(namesList[0]);
-		selectedPerson2 = comboBox_2.getSelectedItem().toString();
-		sqliteDB DB = sqliteDB.getInstance();
-		p2_id = DB.getIdFromFullName(selectedPerson2);
+		comboBox_1.setSelectedItem(namesList[0]);
 		comboBox_2.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 
 				try{
-					sqliteDB db = sqliteDB.getInstance();
+					
 					if(e.getStateChange() == ItemEvent.SELECTED){
 						System.out.println(comboBox_2.getSelectedItem());
 						System.out.println("combobox item listener");
 						selectedPerson1 = comboBox_2.getSelectedItem().toString();
-						
+						sqliteDB db = sqliteDB.getInstance();
 						p2_id = db.getIdFromFullName(selectedPerson1);
 					}
 					}

@@ -3,20 +3,12 @@ package UI;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.JButton;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.zest.dot.DotGraph;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.sql.Connection;
@@ -25,10 +17,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import UI.new_jtable;
-import zesttest.Activator;
-import zesttest.SampleUsage;
 
 //import db.Constants;
+//import db.Messages;
+//import db.Messages;
 import db.sqliteDB;
 import db.Person;
 import db.persist;
@@ -58,7 +50,7 @@ public class form extends JFrame {
 	 */
 	public form() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 344);
+		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -156,7 +148,7 @@ public class form extends JFrame {
 				
 				try{
 					persist persist_object = new persist();
-					ArrayList<ArrayList<String>> relationObject = new ArrayList<ArrayList<String>>();
+					String[][] relationObject = new String[20][20];
 					persist_object.selectAllRelation(relationObject);
 					 relation_jtable rel_table = new relation_jtable(relationObject);
 					}
@@ -169,27 +161,5 @@ public class form extends JFrame {
 		});
 		btnViewAllRelations.setBounds(139, 233, 117, 25);
 		contentPane.add(btnViewAllRelations);
-		
-		JButton btnGraphviz = new JButton("graphviz");
-		btnGraphviz.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				EventQueue.invokeLater(new Runnable() {
-					public void run() {
-						try {
-							graph_form frame = new graph_form();
-							frame.setVisible(true);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				});
-				
-			}
-
-			 
-		});
-		btnGraphviz.setBounds(149, 270, 117, 25);
-		contentPane.add(btnGraphviz);
 	}
 }
