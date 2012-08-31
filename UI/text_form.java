@@ -19,6 +19,10 @@ import db.persist;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class text_form extends JFrame {
 	
@@ -28,6 +32,9 @@ public class text_form extends JFrame {
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private String Gender_str = new String();
+	private String str2 = new String();
 	
 
 	/**
@@ -115,6 +122,7 @@ public class text_form extends JFrame {
 				p.setLastName(str2);
 				p.setAge(num1);
 				p.setId(num2);
+				p.setGender(Gender_str);
 				
 				persist_object.createNewPerson(p);
 				
@@ -139,5 +147,28 @@ public class text_form extends JFrame {
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.setBounds(253, 233, 117, 25);
 		contentPane.add(btnCancel);
+		
+		
+		JRadioButton rdbtnMale = new JRadioButton("Male");
+		rdbtnMale.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				
+				Gender_str = "M";
+			}
+		});
+		buttonGroup.add(rdbtnMale);
+		rdbtnMale.setBounds(108, 202, 149, 23);
+		contentPane.add(rdbtnMale);
+		
+		JRadioButton rdbtnFemale = new JRadioButton("Female");
+		rdbtnFemale.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				
+				Gender_str = "F";
+			}
+		});
+		buttonGroup.add(rdbtnFemale);
+		rdbtnFemale.setBounds(262, 201, 123, 23);
+		contentPane.add(rdbtnFemale);
 	}
 }

@@ -3,6 +3,7 @@ package db;
 import java.util.ArrayList;
 //interface to the persistence module. SQLITE in our case
 //Can also be extended to xmlfile writes if sqlite is not preferred
+import java.util.HashMap;
 
 public class persist
 {
@@ -25,7 +26,7 @@ public class persist
 	{
 		
 		
-		boolean result = dbHandle.insertIntoTablePerson(p1.getFirstName(), p1.getLastName(), p1.getAge(), p1.getId());
+		boolean result = dbHandle.insertIntoTablePerson(p1.getFirstName(), p1.getLastName(), p1.getAge(), p1.getId() , p1.getGender());
 		
 		return result;
 	}
@@ -73,4 +74,23 @@ public class persist
 		 dbHandle.showAllRelationsForDisplayInGraph(relationObject , selectedId);
 		
 	}
+	public boolean selectAllPersonforhashmap(HashMap Person_HM) throws Exception
+	{
+			
+		boolean result = dbHandle.selectFromTablePersonForHashmap(Person_HM);
+		return result;
+	}
+	public void selectAllPersonforGraphSnippet1(ArrayList<ArrayList<Object>> relationObject , int selectedId) throws Exception
+	{
+			
+		dbHandle.showAllRelationsForDisplayInGraphSnippet1(relationObject,selectedId);
+		
+	}
+	/*public boolean selectAllRelationforhashmap(HashMap Relation_HM) throws Exception
+	{
+			
+		boolean result = dbHandle.selectFromTableRelationForHashmap(Relation_HM);
+		return result;
+	}*/
+	
 }

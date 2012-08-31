@@ -18,6 +18,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTree;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 
 public class graph_form extends JFrame {
 
@@ -42,6 +44,9 @@ public class graph_form extends JFrame {
 	int p_id;
 	String selectedPerson = new String();
 	String[] str = new String[20];
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	public JRadioButton rdbtnAll;
+	JRadioButton rdbtnAncestry;
 
 	/**
 	 * Create the frame.
@@ -91,10 +96,13 @@ public class graph_form extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				try{
-					persist persist_object = new persist();
-					ArrayList<ArrayList<String>> relationObject = new ArrayList<ArrayList<String>>();
-					persist_object.selectAllRelationForGraph(relationObject, p_id);
+					if(rdbtnAll.isSelected()){
 					GraphJFaceSnippet2 gef_object = new GraphJFaceSnippet2();
+					}
+					
+					if(rdbtnAncestry.isSelected()){
+						GraphSnippet1 gef1_object = new GraphSnippet1(p_id);
+					}
 					
 					
 					
@@ -102,10 +110,57 @@ public class graph_form extends JFrame {
 				catch(Exception ex){
 					ex.printStackTrace();
 					
+					
 				}
 			}
 		});
 		btnShowTheGraph.setBounds(50, 139, 117, 25);
 		contentPane.add(btnShowTheGraph);
+		
+		 rdbtnAll = new JRadioButton("All");
+		rdbtnAll.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				
+				try{
+					persist persist_object = new persist();
+					ArrayList<ArrayList<String>> relationObject = new ArrayList<ArrayList<String>>();
+					persist_object.selectAllRelationForGraph(relationObject, p_id);
+					//GraphJFaceSnippet2 gef_object = new GraphJFaceSnippet2();
+				}
+				
+					
+					
+				
+				catch(Exception ex){
+					ex.printStackTrace();
+					
+				}
+				
+				
+			}
+		});
+		buttonGroup.add(rdbtnAll);
+		rdbtnAll.setBounds(33, 100, 149, 23);
+		contentPane.add(rdbtnAll);
+		
+		rdbtnAncestry = new JRadioButton("Ancestry");
+		rdbtnAncestry.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				try{
+					persist persist_object = new persist();
+					ArrayList<ArrayList<Object>> relationObject = new ArrayList<ArrayList<Object>>();
+					persist_object.selectAllPersonforGraphSnippet1(relationObject, p_id);
+				//GraphSnippet1 gef1_object = new GraphSnippet1(p_id);
+				}
+				catch(Exception ep){
+					System.out.println("Error in ancestry radio button : ");
+					ep.printStackTrace();
+					
+				}
+			}
+		});
+		buttonGroup.add(rdbtnAncestry);
+		rdbtnAncestry.setBounds(190, 100, 149, 23);
+		contentPane.add(rdbtnAncestry);
 	}
 }

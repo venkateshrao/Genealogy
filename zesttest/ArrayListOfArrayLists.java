@@ -5,6 +5,10 @@ public class ArrayListOfArrayLists
 {
 	public static void main(String[] args)
 	{
+		ArrayList<ArrayList<String>> str = new ArrayList<ArrayList<String>>();
+		str.add(new ArrayList<String>());
+		String s ="a";str.get(0).get(0).equals(s);
+		System.out.println(str.get(0).get(0));
 		ArrayList<ArrayList<Integer>> listOfList = new ArrayList<ArrayList<Integer>>();
         
         for (int row = 0; row < 5; row++)
