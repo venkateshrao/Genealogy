@@ -25,8 +25,10 @@ public class Person {
 	public void setLastName(String name) { last_name = name; }
 	public void setAge(int years) { age = years; }
 	public void setId(int identification) { id = identification; }
-	public String getGender(){return gender; }
 	public void setGender(String Gender_str){gender = Gender_str;}
+	public String getGender(){ return gender; }
+	public void setBirthDate(String BirthDate){BDay = BirthDate;}
+	public String getBirthDate(){return BDay;}
 	public void addRelation(Relation r) {;}
 	//public Relationships getRelation() { ; }
 	
@@ -46,6 +48,7 @@ public class Person {
 	private int age;
 	private int id;
 	private String gender;
+	private String BDay;
 	
 	//Person should have the list of relationships that he is involved in
 	private ArrayList<Relation> relationList;

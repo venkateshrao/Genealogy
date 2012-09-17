@@ -53,7 +53,7 @@ public class sqliteDB
 {
 
 	public static final String SQLITE_CLASS_FORMAT =  "org.sqlite.JDBC";
-	public static final String SQLITE_JDBC_DB = "jdbc:sqlite:test2.db";
+	public static final String SQLITE_JDBC_DB = "jdbc:sqlite:test3.db";
 
 	private static sqliteDB instance = null;
 
@@ -87,7 +87,7 @@ public class sqliteDB
 		if(table_name == Constants.TABLE_NAME_PEOPLE)
 		{
 			// create table people (TEXT f_name, TEXT l_Name, INT age, INT id);
-			dbStmt = "create table "+Constants.TABLE_NAME_PEOPLE+" (f_name TEXT,l_name TEXT,age number,id number,Gender TEXT);" ;
+			dbStmt = "create table "+Constants.TABLE_NAME_PEOPLE+" (f_name TEXT,l_name TEXT,age number,id number,Gender TEXT,BDay TEXT);" ;
 		}
 		else if(table_name == Constants.TABLE_NAME_RELATION)
 		{
@@ -171,7 +171,7 @@ public class sqliteDB
 		return Constants.FALSE_VALUE;
 	}
 
-	public boolean insertIntoTablePerson(String f_name, String l_name, int age, int id , String gender) throws Exception
+	public boolean insertIntoTablePerson(String f_name, String l_name, int age, int id , String gender , String BDay) throws Exception
 	{
 		Statement stat = null;
 		try
@@ -183,7 +183,7 @@ public class sqliteDB
 
 			stat = conn.createStatement();
 			// insert into tablename (collist) values (colvalues);
-			String insertString = "insert into "+Constants.TABLE_NAME_PEOPLE+" (f_name ,l_name ,age ,id,Gender ) values ('"+f_name+"','"+l_name+"',"+age+",( SELECT IFNULL(MAX(id), 0)+1 AS MaxX from people) , '"+gender+"');" ;
+			String insertString = "insert into "+Constants.TABLE_NAME_PEOPLE+" (f_name ,l_name ,age ,id, Gender , BDay ) values ('"+f_name+"','"+l_name+"',"+age+",( SELECT IFNULL(MAX(id), 0)+1 AS MaxX from people) , '"+gender+"','"+BDay+"');" ;
 
 			conn.setAutoCommit(false);
 			stat.executeUpdate(insertString);
@@ -233,6 +233,8 @@ public class sqliteDB
 					new_person.setLastName(rs.getString("l_name"));
 					new_person.setAge(rs.getInt("age"));
 					new_person.setId(rs.getInt("id"));
+					new_person.setGender(rs.getString("Gender"));
+					new_person.setBirthDate(rs.getString("BDay"));
 					i = rs.getInt("id");
 				}
 				else

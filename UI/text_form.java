@@ -15,6 +15,8 @@ import db.sqliteDB;
 import db.Person;
 import db.persist;
 
+import UI.Duplicate_Entry;
+
 
 
 import java.awt.event.ActionListener;
@@ -23,6 +25,11 @@ import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.util.Iterator;
+
+import javax.swing.JComboBox;
+
+import lme.logical_entities;
 
 public class text_form extends JFrame {
 	
@@ -35,6 +42,10 @@ public class text_form extends JFrame {
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private String Gender_str = new String();
 	private String str2 = new String();
+	private JTextField textField_4;
+	int selectedDay;
+    int selectedMonth;
+	int selectedYear;
 	
 
 	/**
@@ -59,7 +70,7 @@ public class text_form extends JFrame {
 	public text_form() {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(200, 200, 650, 3000);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -105,7 +116,7 @@ public class text_form extends JFrame {
 		btnSubmit.addActionListener(new ActionListener()  {
 			public void actionPerformed(ActionEvent e)  {
 				try{
-					Person p = new Person();
+					final Person p = new Person();
 					persist persist_object = new persist();
 				sqliteDB db = sqliteDB.getInstance();
 				
@@ -113,7 +124,8 @@ public class text_form extends JFrame {
 				String str1 = textField.getText();
 				String str2 = textField_1.getText();
 				//String str3 = textField_2.getText();
-				//String str4 = textField_3.getText();
+				selectedYear = Integer.parseInt(textField_4.getText());
+				String BirthDate = selectedDay+"-"+selectedMonth+"-"+selectedYear;
 				
 				int num1 = Integer.parseInt(textField_2.getText());
 				int num2 =  Integer.parseInt(textField_3.getText());
@@ -123,8 +135,39 @@ public class text_form extends JFrame {
 				p.setAge(num1);
 				p.setId(num2);
 				p.setGender(Gender_str);
+				p.setBirthDate(BirthDate);
+				logical_entities LE = logical_entities.getInstance();
+				Iterator iterator = LE.Person_HM.keySet().iterator();  
+				   
+				while (iterator.hasNext()) {  
+				   int key = Integer.parseInt(iterator.next().toString());  
+				   Person value = LE.Person_HM.get(key); 
+				//HashMap<Key, Value> map = new HashMap<Key, Value>();
+				//for (Integer key : LE.Person_HM.keySet()) {
+				  //  Person value = LE.Person_HM.get(key);
+				    System.out.println("g "+p.getGender());
+				    if(value.getFirstName().equalsIgnoreCase(p.getFirstName()) && value.getLastName().equalsIgnoreCase(p.getLastName()) && value.getAge() == p.getAge() && value.getGender().equalsIgnoreCase(p.getGender())){
+				    	EventQueue.invokeLater(new Runnable() {
+							public void run() {
+								try {
+									Duplicate_Entry frame = new Duplicate_Entry(p);
+									frame.setVisible(true);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+				    	break;
+				}
+				    else{
+				    	persist_object.createNewPerson(p);
+				    	break;
+				    }
+				    	
+				    
+				}
 				
-				persist_object.createNewPerson(p);
+				//persist_object.createNewPerson(p);
 				
 				
 				//db.insertIntoTablePerson(str1, str2, num1, num2);
@@ -141,11 +184,11 @@ public class text_form extends JFrame {
 				
 			}
 		});
-		btnSubmit.setBounds(87, 233, 117, 25);
+		btnSubmit.setBounds(45, 380, 117, 25);
 		contentPane.add(btnSubmit);
 		
 		JButton btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(253, 233, 117, 25);
+		btnCancel.setBounds(238, 380, 117, 25);
 		contentPane.add(btnCancel);
 		
 		
@@ -170,5 +213,48 @@ public class text_form extends JFrame {
 		buttonGroup.add(rdbtnFemale);
 		rdbtnFemale.setBounds(262, 201, 123, 23);
 		contentPane.add(rdbtnFemale);
+		
+		JLabel lblDateOfBirth = new JLabel("Date of Birth");
+		lblDateOfBirth.setBounds(45, 251, 93, 15);
+		contentPane.add(lblDateOfBirth);
+		
+		 final JComboBox<Integer> comboBox = new JComboBox<Integer>();
+		for(int i=1;i<=31;i++){
+			comboBox.addItem(i);
+			}
+		/*Initialization*/
+		comboBox.setSelectedIndex(0);
+		selectedDay = Integer.parseInt(comboBox.getSelectedItem().toString());
+		comboBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					selectedDay = Integer.parseInt(comboBox.getSelectedItem().toString());
+				}
+			}
+		});
+		
+		comboBox.setBounds(54, 291, 48, 24);
+		contentPane.add(comboBox);
+		
+		final JComboBox<Integer> comboBox_1 = new JComboBox<Integer>();
+		for(int i=1;i<=12;i++){
+			comboBox_1.addItem(i);
+		}
+		/*Initialization*/
+		comboBox_1.setSelectedIndex(0);
+		selectedMonth = Integer.parseInt(comboBox_1.getSelectedItem().toString());
+		comboBox_1.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				selectedMonth = Integer.parseInt(comboBox_1.getSelectedItem().toString());
+			}
+		});
+		
+		comboBox_1.setBounds(180, 291, 39, 24);
+		contentPane.add(comboBox_1);
+		
+		textField_4 = new JTextField();
+		textField_4.setBounds(241, 294, 114, 19);
+		contentPane.add(textField_4);
+		textField_4.setColumns(10);
 	}
 }

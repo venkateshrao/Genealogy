@@ -26,7 +26,7 @@ public class persist
 	{
 		
 		
-		boolean result = dbHandle.insertIntoTablePerson(p1.getFirstName(), p1.getLastName(), p1.getAge(), p1.getId() , p1.getGender());
+		boolean result = dbHandle.insertIntoTablePerson(p1.getFirstName(), p1.getLastName(), p1.getAge(), p1.getId() , p1.getGender() , p1.getBirthDate());
 		
 		return result;
 	}
